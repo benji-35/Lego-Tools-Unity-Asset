@@ -68,21 +68,10 @@ namespace kap35 {
                 }
             }
 
-            private void OnTriggerEnter(Collider other)
-            {
+            private void OnTriggerEnter(Collider other) {
                 if (damageTags.Contains(other.tag)) {
-                    life -= 10;
-                    onLifeChage.Invoke();
-                    OnLifeChange();
+                    TakeDamage(10);
                     Destroy(other.gameObject);
-                    if (life <= 0)
-                    {
-                        GenerateCoin();
-                        onDeath.Invoke();
-                        OnDeath();
-                        if (destroyOnDeath)
-                            Destroy(gameObject);
-                    }
                 }
             }
 
@@ -119,6 +108,19 @@ namespace kap35 {
             
             public List<string> GetDamageTags() {
                 return damageTags;
+            }
+
+            public void TakeDamage(int damages) {
+                life -= damages;
+                onLifeChage.Invoke();
+                OnLifeChange();
+                if (life <= 0) {
+                    GenerateCoin();
+                    onDeath.Invoke();
+                    OnDeath();
+                    if (destroyOnDeath)
+                        Destroy(gameObject);
+                }
             }
         }
     }

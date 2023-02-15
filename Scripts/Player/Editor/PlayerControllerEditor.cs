@@ -22,6 +22,15 @@ public class PlayerControllerEditor : Editor {
             SerializedProperty bulletSpeed;
             SerializedProperty bulletLifeTime;
             SerializedProperty fireRate;
+            
+            //camera part
+            SerializedProperty camera;
+            SerializedProperty animator;
+            
+            //hit
+            SerializedProperty hit;
+            SerializedProperty hitDistance;
+            
 
         #endregion
 
@@ -30,6 +39,7 @@ public class PlayerControllerEditor : Editor {
             bool gravitySettings = false;
             bool mouseSettings = false;
             bool bulletSettings = false;
+            bool hitSettings = false;
 
         #endregion
 
@@ -47,6 +57,10 @@ public class PlayerControllerEditor : Editor {
             bulletSpeed = serializedObject.FindProperty("bulletSpeed");
             bulletLifeTime = serializedObject.FindProperty("bulletLifeTime");
             fireRate = serializedObject.FindProperty("fireRate");
+            camera = serializedObject.FindProperty("cameraHolder");
+            animator = serializedObject.FindProperty("animator");
+            hit = serializedObject.FindProperty("hitPoint");
+            hitDistance = serializedObject.FindProperty("hitPointDistance");
         }
 
         public override void OnInspectorGUI()
@@ -68,10 +82,14 @@ public class PlayerControllerEditor : Editor {
             EditorGUILayout.Space(20);
             EditorGUILayout.PropertyField(speed);
             EditorGUILayout.PropertyField(runSpeed);
+            EditorGUILayout.PropertyField(camera);
+            EditorGUILayout.PropertyField(animator);
             EditorGUILayout.Space(20);
             DrawGravityInspector();
             EditorGUILayout.Space(20);
             DrawMouseInspector();
+            EditorGUILayout.Space(20);
+            DrawHitInspector();
         }
         
         private void DrawGravityInspector() {
@@ -89,6 +107,15 @@ public class PlayerControllerEditor : Editor {
                 EditorGUILayout.PropertyField(mouseSensitivity);
                 EditorGUILayout.PropertyField(upLimit);
                 EditorGUILayout.PropertyField(downLimit);
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+        }
+        
+        private void DrawHitInspector() {
+            hitSettings = EditorGUILayout.Foldout(hitSettings, "Hit Settings");
+            if (hitSettings) {
+                EditorGUILayout.PropertyField(hit);
+                EditorGUILayout.PropertyField(hitDistance);
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
         }

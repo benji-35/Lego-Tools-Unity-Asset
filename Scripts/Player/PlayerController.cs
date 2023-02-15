@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace kap35 {
@@ -6,6 +8,7 @@ namespace kap35 {
         public class PlayerController : MonoBehaviour {
             [Header("Components")]
             private CharacterController characterController;
+            [SerializeField] private Animator animator;
 
             [Header("Settings")]
             [SerializeField] private float speed = 6.0f;
@@ -22,9 +25,12 @@ namespace kap35 {
             [SerializeField] private float mouseSensitivity = 1.0f;
             [SerializeField] private float upLimit = -50.0f;
             [SerializeField] private float downLimit = 50.0f;
+            [SerializeField] private Transform hitPoint;
+            [SerializeField] private float hitPointDistance = 1.0f;
 
             private GameManger manager;
             private Rigidbody rbPlayer;
+            private bool canMove = true;
 
             // Start is called before the first frame update
             void Start() {
@@ -38,35 +44,49 @@ namespace kap35 {
             }
 
             // Update is called once per frame
-            void Update()
-            {
+            void Update() {
                 if (manager == null || manager.IsInPauseMenu())
                     return;
                 Move();
                 Rotate();
+                Punch();
             }
 
             private void Move() {
+                if (!canMove) {
+                    animator.SetBool("run", false);
+                    animator.SetBool("walk", false);
+                    return;
+                }
                 float horizontalMove = Input.GetAxis("Horizontal");
                 float verticalMove = Input.GetAxis("Vertical");
+                
+                bool moving = false;
+                if (verticalMove != 0 || horizontalMove != 0) {
+                    moving = true;
+                    animator.SetBool("walk", true);
+                } else  {
+                    animator.SetBool("walk", false);
+                }
 
                 if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
                     running = true;
-                }
-                else
-                {
+                    if (moving && animator != null) {
+                        animator.SetBool("run", true);
+                    }
+                } else  {
                     running = false;
+                    animator.SetBool("run", false);
                 }
 
-                if (characterController.isGrounded)
-                {
+                if (characterController.isGrounded) {
                     verticalSpeed = 0.0f;
-                    if (Input.GetKey(KeyCode.Space))
+                    if (Input.GetKey(KeyCode.Space)) {
+                        animator.SetTrigger("jump");
                         verticalSpeed = jumpForce;
-                }
-                else
-                {
+                    }
+                } else {
                     verticalSpeed -= gravity * Time.deltaTime;
                 }
 
@@ -88,6 +108,7 @@ namespace kap35 {
 
                 transform.Rotate(0, horizontalRotation * mouseSensitivity, 0);
                 cameraHolder.Rotate(-verticalRotation * mouseSensitivity, 0, 0);
+                hitPoint.Rotate(-verticalRotation * mouseSensitivity, 0, 0);
 
                 Vector3 currentRotation = cameraHolder.localEulerAngles;
                 if (currentRotation.x > 180)
@@ -97,6 +118,36 @@ namespace kap35 {
 
                 currentRotation.x = Mathf.Clamp(currentRotation.x, upLimit, downLimit);
                 cameraHolder.localRotation = Quaternion.Euler(currentRotation);
+            }
+
+            private void Punch() {
+                if (!Input.GetKeyDown(KeyCode.Mouse0)) {
+                    return;
+                }
+                animator.SetTrigger("punch");
+                StartCoroutine(stopMovement(0.867f));
+                RaycastHit hit;
+                if (Physics.Raycast(hitPoint.position, hitPoint.forward, out hit, hitPointDistance)) {
+                    Collider collider = hit.collider;
+                    if (collider != null) {
+                        Life life = collider.GetComponent<Life>();
+                        if (life != null) {
+                            life.TakeDamage(10);
+                        }
+                    }
+                }
+            }
+            
+            IEnumerator stopMovement(float time) {
+                canMove = false;
+                yield return new WaitForSeconds(time);
+                canMove = true;
+            }
+
+            private void OnDrawGizmos()
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawRay(hitPoint.position, hitPoint.forward * hitPointDistance);
             }
         }
     }
