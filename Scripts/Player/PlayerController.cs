@@ -1,16 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 
-namespace kap35
-{
-    namespace lego
-    {
+namespace kap35 {
+    namespace lego {
         [RequireComponent(typeof(CharacterController), typeof(Rigidbody))]
-        public class PlayerController : MonoBehaviour
-        {
-            [Header("Components")] [SerializeField]
+        public class PlayerController : MonoBehaviour {
+            [Header("Components")]
             private CharacterController characterController;
 
             [Header("Settings")] [SerializeField] private float speed = 6.0f;
@@ -24,37 +18,16 @@ namespace kap35
             [SerializeField] private float mouseSensitivity = 1.0f;
             [SerializeField] private float upLimit = -50.0f;
             [SerializeField] private float downLimit = 50.0f;
-            [Header("Shooter")] [SerializeField] private GameObject bulletPrefab;
-            [SerializeField] private Transform bulletSpawn;
-            [SerializeField] private float bulletSpeed = 10.0f;
-            [SerializeField] private float bulletLifeTime = 2.0f;
-            [SerializeField] private float fireRate = 0.5f;
-            private float nextFire = 0.0f;
 
             private GameManger manager;
 
             // Start is called before the first frame update
-            void Start()
-            {
+            void Start() {
                 try {
-                manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManger>();
+                    characterController = GetComponent<CharacterController>();
+                    manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManger>();
                 } catch (System.Exception e) {
                     Debug.Log(e);
-                }
-            }
-
-            private void Fire()
-            {
-                if (Input.GetButton("Fire1") && Time.time > nextFire && bulletPrefab != null)
-                {
-                    nextFire = Time.time + fireRate;
-                    Vector3 rotation = cameraHolder.rotation.eulerAngles;
-                    bulletSpawn.rotation = Quaternion.Euler(rotation);
-                    GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-                    bullet.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-                    Rigidbody rb = bullet.GetComponent<Rigidbody>();
-                    rb.velocity = bulletSpawn.forward * bulletSpeed;
-                    Destroy(bullet, bulletLifeTime);
                 }
             }
 
@@ -65,7 +38,6 @@ namespace kap35
                     return;
                 Move();
                 Rotate();
-                Fire();
             }
 
             private void Move()
