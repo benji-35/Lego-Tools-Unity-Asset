@@ -51,7 +51,9 @@ public class PlayerControllerEditor : Editor {
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
             DrawBeginInspector();
+            serializedObject.ApplyModifiedProperties();
         }
     
         private void DrawBeginInspector() {

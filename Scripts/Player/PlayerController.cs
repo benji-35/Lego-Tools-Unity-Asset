@@ -2,29 +2,35 @@ using UnityEngine;
 
 namespace kap35 {
     namespace lego {
-        [RequireComponent(typeof(CharacterController), typeof(Rigidbody))]
+        [RequireComponent(typeof(CharacterController))]
         public class PlayerController : MonoBehaviour {
             [Header("Components")]
             private CharacterController characterController;
 
-            [Header("Settings")] [SerializeField] private float speed = 6.0f;
+            [Header("Settings")]
+            [SerializeField] private float speed = 6.0f;
             [SerializeField] private float runSpeed = 10.0f;
             private bool running = false;
-            [Header("Gravity")] [SerializeField] private float gravity = 9.81f;
-
+            
+            [Header("Gravity")]
+            [SerializeField] private float gravity = 9.81f;
             [SerializeField] private float jumpForce = 2.0f;
             private float verticalSpeed = 0.0f;
-            [Header("Camera")] [SerializeField] private Transform cameraHolder;
+            
+            [Header("Camera")]
+            [SerializeField] private Transform cameraHolder;
             [SerializeField] private float mouseSensitivity = 1.0f;
             [SerializeField] private float upLimit = -50.0f;
             [SerializeField] private float downLimit = 50.0f;
 
             private GameManger manager;
+            private Rigidbody rbPlayer;
 
             // Start is called before the first frame update
             void Start() {
                 try {
                     characterController = GetComponent<CharacterController>();
+//                    rbPlayer = GetComponent<Rigidbody>();
                     manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManger>();
                 } catch (System.Exception e) {
                     Debug.Log(e);
@@ -40,8 +46,7 @@ namespace kap35 {
                 Rotate();
             }
 
-            private void Move()
-            {
+            private void Move() {
                 float horizontalMove = Input.GetAxis("Horizontal");
                 float verticalMove = Input.GetAxis("Vertical");
 
@@ -57,7 +62,7 @@ namespace kap35 {
                 if (characterController.isGrounded)
                 {
                     verticalSpeed = 0.0f;
-                    if (Input.GetKeyDown(KeyCode.Space))
+                    if (Input.GetKey(KeyCode.Space))
                         verticalSpeed = jumpForce;
                 }
                 else
