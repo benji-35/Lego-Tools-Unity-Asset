@@ -289,7 +289,7 @@ namespace kap35
                         case QuestType.Kill:
                             col = Color.red;
                             break;
-                        case QuestType.Destruct:
+                        case QuestType.Destroy:
                             col = Color.red;
                             break;
                         case QuestType.Talk:

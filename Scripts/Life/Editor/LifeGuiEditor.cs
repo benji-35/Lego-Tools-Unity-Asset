@@ -15,7 +15,7 @@ public class LifeGuiEditor : Editor
         private SerializedProperty lifeBar;
         private SerializedProperty lifeText;
         private SerializedProperty lifeBarTextType;
-        private SerializedProperty name;
+        private SerializedProperty _name;
     
     #endregion
     
@@ -29,7 +29,7 @@ public class LifeGuiEditor : Editor
             lifeBar = serializedObject.FindProperty("lifeBar");
             lifeText = serializedObject.FindProperty("lifeText");
             lifeBarTextType = serializedObject.FindProperty("lifeBarTextType");
-            name = serializedObject.FindProperty("name");
+            _name = serializedObject.FindProperty("name");
         }
 
         public override void OnInspectorGUI()
@@ -52,7 +52,7 @@ public class LifeGuiEditor : Editor
             {
                 EditorGUILayout.PropertyField(lifeBarTextType);
                 if (lifeGui.GetLifeBarTextType() == LifeBarTextType.Name)
-                    EditorGUILayout.PropertyField(name);
+                    EditorGUILayout.PropertyField(_name);
             }
 
             serializedObject.ApplyModifiedProperties();
