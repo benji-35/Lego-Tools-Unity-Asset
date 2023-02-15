@@ -11,7 +11,7 @@ namespace kap35 {
             [Header("Life Settings")]
             [SerializeField] private int maxLife = 100;
             [SerializeField] protected bool destroyOnDeath = false;
-            [SerializeField] private LayerMask damageLayer;
+            [SerializeField] private List<string> damageTags;
 
             private int life = 100;
             [SerializeField] private UnityEvent onDeath;
@@ -70,8 +70,7 @@ namespace kap35 {
 
             private void OnTriggerEnter(Collider other)
             {
-                if (damageLayer == (damageLayer | (1 << other.gameObject.layer)))
-                {
+                if (damageTags.Contains(other.tag)) {
                     life -= 10;
                     onLifeChage.Invoke();
                     OnLifeChange();
@@ -108,6 +107,18 @@ namespace kap35 {
             
             public int GetLife() {
                 return life;
+            }
+            
+            public void addDamageTag(string tag) {
+                damageTags.Add(tag);
+            }
+            
+            public void removeDamageTag(string tag) {
+                damageTags.Remove(tag);
+            }
+            
+            public List<string> GetDamageTags() {
+                return damageTags;
             }
         }
     }

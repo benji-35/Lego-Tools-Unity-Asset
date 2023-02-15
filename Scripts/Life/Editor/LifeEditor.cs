@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using kap35.lego;
@@ -29,6 +30,7 @@ public class LifeEditor : Editor {
 
         private bool showCoinSettings = false;
         private bool showEventsSettings = false;
+        int tagSelected = 0;
 
         #endregion
     
@@ -39,7 +41,7 @@ public class LifeEditor : Editor {
             destroyOnDeath = serializedObject.FindProperty("destroyOnDeath");
             onDeath = serializedObject.FindProperty("onDeath");
             onLifeChage = serializedObject.FindProperty("onLifeChage");
-            damageLayer = serializedObject.FindProperty("damageLayer");
+            damageLayer = serializedObject.FindProperty("damageTags");
             
             coin = serializedObject.FindProperty("coin");
             yellowCoins = serializedObject.FindProperty("yellowCoins");
@@ -60,7 +62,8 @@ public class LifeEditor : Editor {
             GUILayout.Label("Life Settings", style);
             
             EditorGUILayout.PropertyField(maxLife, new GUIContent("Max Life"));
-            EditorGUILayout.PropertyField(damageLayer, new GUIContent("Damage Layer"));
+            displayTags(life);
+//            EditorGUILayout.PropertyField(damageLayer, new GUIContent("Damage Tags"));
             
             EditorGUILayout.Space(20);
             displayEvents();
@@ -94,6 +97,35 @@ public class LifeEditor : Editor {
             }
         }
 
+        private void displayTags(Life life)
+        {
+            EditorGUILayout.LabelField("Damage Tags");
+            string[] currentTags = life.GetDamageTags().ToArray();
+            foreach (var tag in currentTags) {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(tag);
+                if (GUILayout.Button("Remove")) {
+                    life.removeDamageTag(tag);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            string[] availableTags = UnityEditorInternal.InternalEditorUtility.tags;
+            
+            List<string> newTags = new List<string>();
+            foreach (var tag in availableTags) {
+                if (!currentTags.Contains(tag)) {
+                    newTags.Add(tag);
+                }
+            }
+            if (tagSelected > newTags.Count - 1)
+                tagSelected = newTags.Count - 1;
+            tagSelected = EditorGUILayout.Popup(tagSelected, newTags.ToArray());
+            if (GUILayout.Button("Add Damage Tag")) {
+                life.addDamageTag(newTags[tagSelected]);
+            }
+            EditorGUILayout.HelpBox("Add tags to the list to make the object damageable by objects with the same tag", MessageType.Info);
+        }
+        
         #endregion
 }
 
