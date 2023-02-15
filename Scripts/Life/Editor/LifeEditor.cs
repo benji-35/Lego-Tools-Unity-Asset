@@ -104,7 +104,7 @@ public class LifeEditor : Editor {
             foreach (var tag in currentTags) {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(tag);
-                if (GUILayout.Button("Remove")) {
+                if (GUILayout.Button("Remove", getButtonStyle())) {
                     life.removeDamageTag(tag);
                 }
                 EditorGUILayout.EndHorizontal();
@@ -120,10 +120,17 @@ public class LifeEditor : Editor {
             if (tagSelected > newTags.Count - 1)
                 tagSelected = newTags.Count - 1;
             tagSelected = EditorGUILayout.Popup(tagSelected, newTags.ToArray());
-            if (GUILayout.Button("Add Damage Tag")) {
+            if (GUILayout.Button("Add Damage Tag", getButtonStyle())) {
                 life.addDamageTag(newTags[tagSelected]);
             }
             EditorGUILayout.HelpBox("Add tags to the list to make the object damageable by objects with the same tag", MessageType.Info);
+        }
+        
+        private GUILayoutOption[] getButtonStyle() {
+            return new GUILayoutOption[] {
+                GUILayout.Height(25),
+                GUILayout.Width(150)
+            };
         }
         
         #endregion

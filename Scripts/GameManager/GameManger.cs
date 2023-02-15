@@ -312,6 +312,8 @@ namespace kap35
 
             public void HideQuestInfo()
             {
+                if (questName == null || questDescription == null || questPanelInfo == null)
+                    return;
                 nbInfoQuests--;
                 if (nbInfoQuests <= 0)
                 {

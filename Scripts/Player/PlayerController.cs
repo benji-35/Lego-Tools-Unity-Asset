@@ -7,6 +7,7 @@ namespace kap35
 {
     namespace lego
     {
+        [RequireComponent(typeof(CharacterController), typeof(Rigidbody))]
         public class PlayerController : MonoBehaviour
         {
             [Header("Components")] [SerializeField]
@@ -35,13 +36,16 @@ namespace kap35
             // Start is called before the first frame update
             void Start()
             {
-
+                try {
                 manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManger>();
+                } catch (System.Exception e) {
+                    Debug.Log(e);
+                }
             }
 
             private void Fire()
             {
-                if (Input.GetButton("Fire1") && Time.time > nextFire)
+                if (Input.GetButton("Fire1") && Time.time > nextFire && bulletPrefab != null)
                 {
                     nextFire = Time.time + fireRate;
                     Vector3 rotation = cameraHolder.rotation.eulerAngles;
