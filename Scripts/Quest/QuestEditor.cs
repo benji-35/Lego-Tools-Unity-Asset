@@ -139,7 +139,7 @@ public class QuestEditor : Editor {
                 case QuestType.Collect:
                     DisplayCollectEditor(quest);
                     break;
-                case QuestType.Destruct:
+                case QuestType.Destroy:
                     DisplayDestructEditor();
                     break;
                 case QuestType.Kill:

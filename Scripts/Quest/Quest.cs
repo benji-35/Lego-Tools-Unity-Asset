@@ -352,14 +352,14 @@ namespace kap35
         }
 
         [System.Serializable]
-        public enum QuestType
-        {
+        public enum QuestType {
             Collect,
             Kill,
             Talk,
-            Destruct,
+            Destroy,
             Move,
             Interact,
+            Build,
             Other
         }
 
