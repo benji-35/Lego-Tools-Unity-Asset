@@ -30,6 +30,7 @@ public class PlayerControllerEditor : Editor {
             //hit
             SerializedProperty hit;
             SerializedProperty hitDistance;
+            SerializedProperty damage;
             
 
         #endregion
@@ -61,6 +62,7 @@ public class PlayerControllerEditor : Editor {
             animator = serializedObject.FindProperty("animator");
             hit = serializedObject.FindProperty("hitPoint");
             hitDistance = serializedObject.FindProperty("hitPointDistance");
+            damage = serializedObject.FindProperty("damage");
         }
 
         public override void OnInspectorGUI()
@@ -116,6 +118,7 @@ public class PlayerControllerEditor : Editor {
             if (hitSettings) {
                 EditorGUILayout.PropertyField(hit);
                 EditorGUILayout.PropertyField(hitDistance);
+                EditorGUILayout.PropertyField(damage);
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
         }

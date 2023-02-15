@@ -27,6 +27,7 @@ namespace kap35 {
             [SerializeField] private float downLimit = 50.0f;
             [SerializeField] private Transform hitPoint;
             [SerializeField] private float hitPointDistance = 1.0f;
+            [SerializeField] private int damage = 10;
 
             private GameManger manager;
             private Rigidbody rbPlayer;
@@ -132,7 +133,7 @@ namespace kap35 {
                     if (collider != null) {
                         Life life = collider.GetComponent<Life>();
                         if (life != null) {
-                            life.TakeDamage(10);
+                            life.TakeDamage(damage);
                         }
                     }
                 }

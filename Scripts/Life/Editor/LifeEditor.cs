@@ -62,6 +62,8 @@ public class LifeEditor : Editor {
             GUILayout.Label("Life Settings", style);
             
             EditorGUILayout.PropertyField(maxLife, new GUIContent("Max Life"));
+            EditorGUILayout.LabelField("Current life: ");
+            EditorGUILayout.IntSlider(life.GetLife(), 0, life.GetMaxLife());
             displayTags(life);
 //            EditorGUILayout.PropertyField(damageLayer, new GUIContent("Damage Tags"));
             
