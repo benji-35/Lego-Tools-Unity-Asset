@@ -19,6 +19,7 @@ public class QuestEditor : Editor {
             private SerializedProperty questType;
             private SerializedProperty onFinish;
             private SerializedProperty onStart;
+            private SerializedProperty state;
 
             #region moveVars
 
@@ -42,11 +43,14 @@ public class QuestEditor : Editor {
             
             #region DisplayingLogo
 
-                private float minSize;
-                private float maxSize;
+                private SerializedProperty minSize;
+                private SerializedProperty maxSize;
                 
-                private float maxSizeDistance;
-                private float minSizeDistance;
+                private SerializedProperty maxSizeDistance;
+                private SerializedProperty minSizeDistance;
+                private SerializedProperty distanceText;
+                private SerializedProperty refDistance;
+                private SerializedProperty QuestMarker;
                 
             #endregion
             
@@ -57,27 +61,43 @@ public class QuestEditor : Editor {
             
             #region CollectQuest
 
-            private SerializedProperty collectables;
+                private SerializedProperty collectables;
             
             #endregion
-        
+
+            #region Constructor
+
+                private SerializedProperty constructor;
+                private SerializedProperty haveToCOnstruct;
+
+            #endregion
+            
         #endregion
 
         #region splitsPart
         
-            bool showGeneral = false;
-            bool showEdit = false;
-            bool events = false;
+            private bool showGeneral = false;
+            private bool showEdit = false;
+            private bool events = false;
+            private bool ui = false;
             
         #endregion
     #endregion
 
     private void OnEnable() {
         questName = serializedObject.FindProperty("questName");
+        state = serializedObject.FindProperty("state");
         questDescription = serializedObject.FindProperty("questDescription");
         questType = serializedObject.FindProperty("questType");
         onFinish = serializedObject.FindProperty("eventsOnFinish");
         onStart = serializedObject.FindProperty("eventsOnStart");
+        maxSizeDistance = serializedObject.FindProperty("maxSizeDistance");
+        QuestMarker = serializedObject.FindProperty("QuestMarker");
+        minSizeDistance = serializedObject.FindProperty("minSizeDistance");
+        distanceText = serializedObject.FindProperty("distanceText");
+        refDistance = serializedObject.FindProperty("refDistance");
+        minSize = serializedObject.FindProperty("minSize");
+        maxSize = serializedObject.FindProperty("maxSize");
         
         // moveVars
         waypoints = serializedObject.FindProperty("waypoints");
@@ -96,6 +116,11 @@ public class QuestEditor : Editor {
         
         // collectQuest
         collectables = serializedObject.FindProperty("collectables");
+        
+        // constructor
+        constructor = serializedObject.FindProperty("constructable");
+        haveToCOnstruct = serializedObject.FindProperty("haveToConstruct");
+        
     }
 
     public override void OnInspectorGUI() {
@@ -116,9 +141,24 @@ public class QuestEditor : Editor {
             EditorGUILayout.PropertyField(questName);
             EditorGUILayout.PropertyField(questDescription);
             EditorGUILayout.PropertyField(questType);
+            EditorGUILayout.PropertyField(state);
             serializedObject.ApplyModifiedProperties();
         }
         EditorGUI.EndFoldoutHeaderGroup();
+        
+        ui = EditorGUILayout.BeginFoldoutHeaderGroup(ui, "UI");
+        if (ui) {
+            EditorGUILayout.HelpBox("UI is displayed when the quest is active", MessageType.Info);
+            EditorGUILayout.PropertyField(QuestMarker);
+            EditorGUILayout.PropertyField(minSize);
+            EditorGUILayout.PropertyField(maxSize);
+            EditorGUILayout.PropertyField(maxSizeDistance);
+            EditorGUILayout.PropertyField(minSizeDistance);
+            EditorGUILayout.PropertyField(distanceText);
+            EditorGUILayout.PropertyField(refDistance);
+            serializedObject.ApplyModifiedProperties();
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
 
         events = EditorGUILayout.BeginFoldoutHeaderGroup(events, "Events");
         if (events) {
@@ -154,6 +194,9 @@ public class QuestEditor : Editor {
                 case QuestType.Interact:
                     DisplayInteractable();
                     break;
+                case QuestType.Construct:
+                    DisplayConstructEditor();
+                    break;
                 default:
                     DisplayOtherEditor();
                     break;
@@ -177,6 +220,23 @@ public class QuestEditor : Editor {
         EditorGUILayout.PropertyField(collectables, true);
         EditorGUILayout.EndHorizontal();
         
+    }
+
+    private void DisplayConstructEditor() {
+        var style = new GUIStyle(GUI.skin.label)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            fontStyle = FontStyle.Bold,
+            fontSize = 15,
+        };
+        EditorGUILayout.LabelField("Construct", style, GUILayout.ExpandWidth(true));
+        EditorGUILayout.Space(15);
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(constructor);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(haveToCOnstruct);
+        EditorGUILayout.EndHorizontal();
     }
     
     private void DisplayKillEditor() {

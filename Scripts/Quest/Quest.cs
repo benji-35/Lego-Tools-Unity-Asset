@@ -19,7 +19,7 @@ namespace kap35
 
             [SerializeField] private GameObject QuestMarker;
             [SerializeField] private QuestObject[] questObjects;
-            private QuestState state = QuestState.NotStarted;
+            [SerializeField] private QuestState state = QuestState.NotStarted;
             private GameObject player;
             private GameObject camPlayer;
             [SerializeField] private TMPro.TextMeshProUGUI distanceText;
@@ -36,34 +36,41 @@ namespace kap35
             [SerializeField] private Color gizmosColor = Color.yellow;
             private int currentWaypoint = 0;
 
-            [Header("Talk Quest")] [SerializeField]
-            private DiscussManager talkTo = null;
+            [Header("Talk Quest")]
+            [SerializeField] private DiscussManager talkTo = null;
 
-            [Header("Collect Quest")] [SerializeField]
-            private List<CollectableObject> collectables;
+            [Header("Collect Quest")]
+            [SerializeField] private List<CollectableObject> collectables;
 
-            [Header("Kill Quest")] [SerializeField]
-            private Life enemy;
+            [Header("Kill Quest")]
+            [SerializeField] private Life enemy;
 
-            [Header("Interact Quest")] [SerializeField]
-            private Interactable interactable;
+            [Header("Interact Quest")]
+            [SerializeField] private Interactable interactable;
+            
+            [Header("Construct Quest")]
+            [SerializeField] private Constructable constructable;
+            [SerializeField] private bool haveToConstruct = false;
 
             [SerializeField] private bool stateButton = true;
 
             private int nbCollected = 0;
 
-            private void Start()
-            {
-                camPlayer = GameObject.FindGameObjectWithTag("MainCamera");
+            private void Start() {
+                camPlayer = GameObject.FindGameObjectWithTag("CameraPlayer");
                 player = GameObject.FindGameObjectWithTag("Player");
                 QuestMarker.SetActive(false);
-                if (refDistance != null)
-                {
+                if (refDistance != null) {
                     refDistance.SetActive(false);
                 }
 
                 if (state == QuestState.Finished)
-                    return;
+                    FinishQuest();
+                if (state == QuestState.InProgress)
+                {
+                    state = QuestState.NotStarted;
+                    StartQuest();
+                }
             }
 
             // Update is called once per frame
@@ -101,13 +108,10 @@ namespace kap35
                     else
                     {
                         float distance = Vector3.Distance(player.transform.position, refDistance.transform.position);
-                        if (distance > 50)
-                        {
-                            distanceText.text = "Distance: " + distance.ToString("0.00") + "cm";
+                        if (distance > 1.2f) {
+                            distanceText.text = "Distance: " + distance.ToString("0.00") + "m";
                             distanceText.fontSize = 40f;
-                        }
-                        else
-                        {
+                        } else {
                             distanceText.text = questName;
                             distanceText.fontSize = 75f;
                         }
@@ -206,7 +210,7 @@ namespace kap35
                 QuestMarker.SetActive(false);
             }
 
-            public void StartQuest()
+            public void StartQuest() 
             {
                 if (state != QuestState.NotStarted)
                     return;
@@ -251,6 +255,15 @@ namespace kap35
                 {
                     QuestMarker.transform.position = interactable.transform.position;
                     refDistance.transform.position = interactable.transform.position;
+                }
+                else if (questType == QuestType.Construct && constructable != null) {
+                    QuestMarker.transform.position = constructable.transform.position;
+                    refDistance.transform.position = constructable.transform.position;
+                    if (haveToConstruct) {
+                        constructable.AddEventOnConstruct(FinishQuest);
+                    } else {
+                        constructable.AddEventOnDestruct(FinishQuest);
+                    }
                 }
 
                 eventsOnStart.Invoke();
@@ -359,7 +372,7 @@ namespace kap35
             Destroy,
             Move,
             Interact,
-            Build,
+            Construct,
             Other
         }
 

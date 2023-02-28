@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace kap35 {
     namespace lego {
@@ -8,6 +9,8 @@ namespace kap35 {
             [SerializeField] private GameObject _destructObject;
             [SerializeField] private GameObject _constructObject;
             [SerializeField] private bool isDestroyed = false;
+            [SerializeField] private UnityEvent _onConstruct;
+            [SerializeField] private UnityEvent _onDestruct;
             private Life _life;
             private Interactable _interactable;
             private Dictionary<int, Vector3> startDestructChildrenPos = new Dictionary<int, Vector3>();
@@ -43,6 +46,7 @@ namespace kap35 {
                 }
                 _destructObject.SetActive(true);
                 _constructObject.SetActive(false);
+                _onDestruct.Invoke();
             }
             
             private void ConstructObject() {
@@ -51,6 +55,15 @@ namespace kap35 {
                 }
                 _destructObject.SetActive(false);
                 _constructObject.SetActive(true);
+                _onConstruct.Invoke();
+            }
+            
+            public void AddEventOnConstruct(UnityAction action) {
+                _onConstruct.AddListener(action);
+            }
+            
+            public void AddEventOnDestruct(UnityAction action) {
+                _onDestruct.AddListener(action);
             }
         }
     }

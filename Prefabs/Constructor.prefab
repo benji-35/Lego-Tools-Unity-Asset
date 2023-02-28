@@ -173,7 +173,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &7089257058925450046
 MonoBehaviour:
@@ -560,7 +560,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7089257059485667034}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.35, y: 0.47, z: 8.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -586,6 +586,12 @@ MonoBehaviour:
   _destructObject: {fileID: 7089257059803105397}
   _constructObject: {fileID: 7089257060499900680}
   isDestroyed: 1
+  _onConstruct:
+    m_PersistentCalls:
+      m_Calls: []
+  _onDestruct:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7089257059520284420
 GameObject:
   m_ObjectHideFlags: 0
