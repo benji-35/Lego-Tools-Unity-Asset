@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7755892406948145975}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: CameraPlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 7755892407996351325}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -183,13 +183,14 @@ MonoBehaviour:
   speed: 6
   runSpeed: 10
   gravity: 3
-  jumpForce: 0.3
+  jumpForce: 0
   cameraHolder: {fileID: 7755892406948145928}
   mouseSensitivity: 1
   upLimit: -50
   downLimit: 50
   hitPoint: {fileID: 7755892407409381950}
   hitPointDistance: 2
+  damage: 10
 --- !u!1001 &7755892406004292263
 PrefabInstance:
   m_ObjectHideFlags: 0

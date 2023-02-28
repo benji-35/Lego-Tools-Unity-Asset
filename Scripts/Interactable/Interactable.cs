@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace kap35
 {
@@ -14,10 +16,26 @@ namespace kap35
             [SerializeField] private UnityEvent onInteractEnd;
             [SerializeField] private bool isInteracting = false;
             [SerializeField] private float interactionTime = 0f;
+            [SerializeField] private Image interactImage;
+            [SerializeField] private GameObject interactCanvas;
             private bool intercated = false;
             private bool isInteracting_ = false;
 
+            private void Start()
+            {
+                if (interactImage != null) {
+                    if (interactionTime > 0) {
+                        interactImage.fillAmount = 0f;
+                    } else {
+                        interactImage.fillAmount = 1f;
+                    }
+                }
+            }
+            
             private void Update() {
+                if (interactImage != null) {
+                    interactCanvas.SetActive(isInteracting);
+                }
                 if (isInteracting && Input.GetKeyDown(KeyCode.E) && interactionTime <= 0f) {
                     intercated = true;
                     GameManger manager = GetGameManager();
@@ -83,9 +101,35 @@ namespace kap35
             }
 
             IEnumerator InteractTiming(float seconds) {
-                yield return new WaitForSeconds(seconds);
-                onInteractEnd.Invoke();
-                OnInteractEnd();
+                while (seconds > 0f) {
+                    if (!isInteracting_) {
+                        if (interactImage != null)
+                            interactImage.fillAmount = 0f;
+                        break;
+                    }
+
+                    seconds -= Time.deltaTime;
+                    if (interactImage != null)
+                        interactImage.fillAmount = 1f - seconds / interactionTime;
+                    yield return null;
+                }
+
+                if (isInteracting_) {
+                    onInteractEnd.Invoke();
+                    OnInteractEnd();
+                }
+            }
+
+            private void OnEnable()
+            {
+                if (interactCanvas != null)
+                    interactCanvas.SetActive(false);
+            }
+
+            private void OnDisable()
+            {
+                if (interactCanvas != null)
+                    interactCanvas.SetActive(false);
             }
         }
     }
