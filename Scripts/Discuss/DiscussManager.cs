@@ -7,7 +7,7 @@ namespace kap35
 {
     namespace lego
     {
-        public class DiscussManager : Interable
+        public class DiscussManager : Interactable
         {
             //first discuss
             [SerializeField] private Discuss firstDiscuss;

@@ -11,7 +11,7 @@ namespace kap35 {
             [Header("Life Settings")]
             [SerializeField] private int maxLife = 100;
             [SerializeField] protected bool destroyOnDeath = false;
-            [SerializeField] private List<string> damageTags;
+            [SerializeField] private List<string> damageTags = new List<string>();
 
             private int life = 100;
             [SerializeField] private UnityEvent onDeath;
@@ -86,7 +86,7 @@ namespace kap35 {
             
             protected virtual void OnLifeChange() {}
             
-            protected void SetLife(int life) {
+            public void SetLife(int life) {
                 this.life = life;
             }
             

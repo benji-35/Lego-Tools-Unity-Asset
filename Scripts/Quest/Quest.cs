@@ -46,7 +46,7 @@ namespace kap35
             private Life enemy;
 
             [Header("Interact Quest")] [SerializeField]
-            private Interable interactable;
+            private Interactable interactable;
 
             [SerializeField] private bool stateButton = true;
 

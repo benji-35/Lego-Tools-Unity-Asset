@@ -39,7 +39,7 @@ public class PlayerControllerEditor : Editor {
 
             bool gravitySettings = false;
             bool mouseSettings = false;
-            bool bulletSettings = false;
+            //bool bulletSettings = false;
             bool hitSettings = false;
 
         #endregion

@@ -83,7 +83,7 @@ namespace kap35 {
 
                 if (characterController.isGrounded) {
                     verticalSpeed = 0.0f;
-                    if (Input.GetKey(KeyCode.Space)) {
+                    if (Input.GetKey(KeyCode.Space) && jumpForce > 0f) {
                         animator.SetTrigger("jump");
                         verticalSpeed = jumpForce;
                     }

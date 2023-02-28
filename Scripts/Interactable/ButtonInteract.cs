@@ -7,7 +7,7 @@ namespace kap35
 {
     namespace lego
     {
-        public class ButtonInteract : Interable {
+        public class ButtonInteract : Interactable {
             [SerializeField] private GameObject displayableState;
             [SerializeField] private  bool active = false;
             [SerializeField] private Animator animator;
