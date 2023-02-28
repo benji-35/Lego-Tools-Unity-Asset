@@ -210,60 +210,68 @@ namespace kap35
                 QuestMarker.SetActive(false);
             }
 
-            public void StartQuest() 
-            {
+            public void StartQuest() {
                 if (state != QuestState.NotStarted)
                     return;
                 GameManger manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManger>();
-                if (!manager.CanQuestStart())
-                {
+                if (!manager.CanQuestStart()) {
                     return;
                 }
 
                 gameObject.SetActive(true);
                 state = QuestState.InProgress;
                 QuestMarker.SetActive(true);
-                if (questType == QuestType.Talk && talkTo != null)
+                switch (questType)
                 {
-                    QuestMarker.transform.position = talkTo.transform.position;
-                    refDistance.transform.position = talkTo.transform.position;
-                    talkTo.AddEventOnFinish(FinishQuest, this);
-                }
-                else if (questType == QuestType.Move && waypoints.Count > 0)
-                {
-                    QuestMarker.transform.position = waypoints[0].position.position;
-                    refDistance.transform.position = waypoints[0].position.position;
-                    currentWaypoint = 0;
-                }
-                else if (questType == QuestType.Collect)
-                {
-                    Debug.Log("collect quest : number of collectables = " + collectables.Count);
-                    for (int i = 0; i < collectables.Count; i++)
+                    case QuestType.Talk when talkTo != null:
+                        QuestMarker.transform.position = talkTo.transform.position;
+                        refDistance.transform.position = talkTo.transform.position;
+                        talkTo.AddEventOnFinish(FinishQuest, this);
+                        break;
+                    case QuestType.Move when waypoints.Count > 0:
+                        QuestMarker.transform.position = waypoints[0].position.position;
+                        refDistance.transform.position = waypoints[0].position.position;
+                        currentWaypoint = 0;
+                        break;
+                    case QuestType.Collect:
                     {
-                        Debug.Log("add event for collectable");
-                        var col = collectables[i];
-                        col.AddEventOnCollect(setCollectableCollected);
+                        Debug.Log("collect quest : number of collectables = " + collectables.Count);
+                        foreach (var t in collectables)
+                        {
+                            Debug.Log("add event for collectable");
+                            var col = t;
+                            col.AddEventOnCollect(setCollectableCollected);
+                        }
+
+                        break;
                     }
-                }
-                else if (questType == QuestType.Kill && enemy != null)
-                {
-                    QuestMarker.transform.position = enemy.transform.position;
-                    refDistance.transform.position = enemy.transform.position;
-                    enemy.AddEventOnDeath(FinishQuest);
-                }
-                else if (questType == QuestType.Interact && interactable != null)
-                {
-                    QuestMarker.transform.position = interactable.transform.position;
-                    refDistance.transform.position = interactable.transform.position;
-                }
-                else if (questType == QuestType.Construct && constructable != null) {
-                    QuestMarker.transform.position = constructable.transform.position;
-                    refDistance.transform.position = constructable.transform.position;
-                    if (haveToConstruct) {
-                        constructable.AddEventOnConstruct(FinishQuest);
-                    } else {
-                        constructable.AddEventOnDestruct(FinishQuest);
+                    case QuestType.Kill when enemy != null:
+                        QuestMarker.transform.position = enemy.transform.position;
+                        refDistance.transform.position = enemy.transform.position;
+                        enemy.AddEventOnDeath(FinishQuest);
+                        break;
+                    case QuestType.Interact when interactable != null:
+                        QuestMarker.transform.position = interactable.transform.position;
+                        refDistance.transform.position = interactable.transform.position;
+                        break;
+                    case QuestType.Construct when constructable != null:
+                    {
+                        QuestMarker.transform.position = constructable.transform.position;
+                        refDistance.transform.position = constructable.transform.position;
+                        if (haveToConstruct) {
+                            constructable.AddEventOnConstruct(FinishQuest);
+                        } else {
+                            constructable.AddEventOnDestruct(FinishQuest);
+                        }
+
+                        break;
                     }
+                    case QuestType.Destroy:
+                        break;
+                    case QuestType.Other:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 eventsOnStart.Invoke();
