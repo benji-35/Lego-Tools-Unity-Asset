@@ -205,7 +205,6 @@ GameObject:
   - component: {fileID: 7748895856295526477}
   - component: {fileID: 7748895856295526482}
   - component: {fileID: 7748895856295526483}
-  - component: {fileID: 7748895856295526480}
   - component: {fileID: 7748895856295526476}
   m_Layer: 0
   m_Name: Chating
@@ -221,7 +220,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7748895856295526481}
-  m_LocalRotation: {x: -0, y: -0.999987, z: -0, w: 0.005104647}
+  m_LocalRotation: {x: 0, y: -0.999987, z: 0, w: 0.005105258}
   m_LocalPosition: {x: 3.21, y: 1.0441, z: 12.4826}
   m_LocalScale: {x: 1, y: 2.0902, z: 1.6483}
   m_ConstrainProportionsScale: 0
@@ -230,7 +229,7 @@ Transform:
   - {fileID: 7748895855051863740}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -179.415, z: 0}
 --- !u!33 &7748895856295526482
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -281,19 +280,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7748895856295526480
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7748895856295526481}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7748895856295526476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,10 +298,12 @@ MonoBehaviour:
   onInteractEnd:
     m_PersistentCalls:
       m_Calls: []
+  interactDistance: 1
   isInteracting: 0
   interactionTime: 0
   interactImage: {fileID: 7748895856649519815}
   interactCanvas: {fileID: 7748895855051863741}
+  discussRefPoint: {fileID: 0}
   firstDiscuss: {fileID: 11400000, guid: 4985f17cdf4507845ba56a729a26668a, type: 2}
   onDiscussionFinish:
     m_PersistentCalls:

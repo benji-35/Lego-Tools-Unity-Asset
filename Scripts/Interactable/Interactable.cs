@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Vector3 = UnityEngine.Vector3;
 
 namespace kap35
 {
@@ -14,15 +16,25 @@ namespace kap35
         {
             [SerializeField] private UnityEvent onInteract;
             [SerializeField] private UnityEvent onInteractEnd;
+            [SerializeField] private float interactDistance = 1f;
             [SerializeField] private bool isInteracting = false;
             [SerializeField] private float interactionTime = 0f;
             [SerializeField] private Image interactImage;
             [SerializeField] private GameObject interactCanvas;
+            [SerializeField] private Transform discussRefPoint;
             private bool intercated = false;
             private bool isInteracting_ = false;
+            private Transform refPoint;
+            private PlayerController pl;
 
             private void Start()
             {
+                pl = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+                if (discussRefPoint == null) {
+                    refPoint = transform;
+                } else {
+                    refPoint = discussRefPoint;
+                }
                 if (interactImage != null) {
                     if (interactionTime > 0) {
                         interactImage.fillAmount = 0f;
@@ -34,6 +46,11 @@ namespace kap35
             
             private void Update() {
                 OnUpdate();
+                if (Vector3.Distance(refPoint.position, pl.transform.position) <= interactDistance && !isInteracting) {
+                    DetectInteracting();
+                } else if (isInteracting) {
+                    StopInteracting();                    
+                }
                 if (interactImage != null) {
                     interactCanvas.SetActive(isInteracting);
                 }
@@ -64,14 +81,13 @@ namespace kap35
                 }
             }
             
-            protected virtual void OnUpdate() {}
+            private void OnDrawGizmos() {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(transform.position, interactDistance);
+            }
 
-            protected virtual void OnInteract() { }
-            protected virtual void OnInteractEnd() { }
-
-            private void OnTriggerEnter(Collider other) {
-                if (other.tag != "Player")
-                    return;
+            private void DetectInteracting()
+            {
                 intercated = false;
                 GameManger manager = GetGameManager();
                 if (manager != null)
@@ -79,14 +95,17 @@ namespace kap35
                 isInteracting = true;
             }
 
-            private void OnTriggerExit(Collider other) {
-                if (other.tag != "Player")
-                    return;
+            private void StopInteracting() {
                 GameManger manager = GetGameManager();
                 if (!intercated && manager != null)
                     manager.HideInteract();
                 isInteracting = false;
             }
+            
+            protected virtual void OnUpdate() {}
+
+            protected virtual void OnInteract() { }
+            protected virtual void OnInteractEnd() { }
 
             protected GameManger GetGameManager() {
                 GameObject manager = GameObject.FindGameObjectWithTag("GameManager");

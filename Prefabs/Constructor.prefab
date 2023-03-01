@@ -715,7 +715,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7089257059803105396}
-  - component: {fileID: 7089257059803105403}
   - component: {fileID: 7089257059803105402}
   m_Layer: 0
   m_Name: Destrcuted
@@ -723,7 +722,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7089257059803105396
 Transform:
   m_ObjectHideFlags: 0
@@ -746,19 +745,6 @@ Transform:
   m_Father: {fileID: 7089257059485667033}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7089257059803105403
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7089257059803105397}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7089257059803105402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,10 +763,12 @@ MonoBehaviour:
   onInteractEnd:
     m_PersistentCalls:
       m_Calls: []
+  interactDistance: 1.1
   isInteracting: 0
   interactionTime: 2
   interactImage: {fileID: 7089257060108448009}
   interactCanvas: {fileID: 7089257058925450041}
+  discussRefPoint: {fileID: 0}
 --- !u!1 &7089257060087176427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7089257060499900687
 Transform:
   m_ObjectHideFlags: 0
