@@ -24,6 +24,7 @@ public class InteractableEditor : Editor {
             SerializedProperty interactImage;
             SerializedProperty interactCanvas;
             SerializedProperty discussRefPoint;
+            SerializedProperty debugDistance;
         #endregion
         
         #region Folders
@@ -47,6 +48,7 @@ public class InteractableEditor : Editor {
             interactImage = serializedObject.FindProperty("interactImage");
             interactCanvas = serializedObject.FindProperty("interactCanvas");
             discussRefPoint = serializedObject.FindProperty("discussRefPoint");
+            debugDistance = serializedObject.FindProperty("debugDistance");
             OnEnabling();
         }
 
@@ -88,6 +90,7 @@ public class InteractableEditor : Editor {
                     EditorGUILayout.PropertyField(interactImage);
                     EditorGUILayout.PropertyField(interactCanvas);
                     EditorGUILayout.PropertyField(discussRefPoint);
+                    EditorGUILayout.PropertyField(debugDistance);
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }

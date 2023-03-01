@@ -22,14 +22,19 @@ namespace kap35
             [SerializeField] private Image interactImage;
             [SerializeField] private GameObject interactCanvas;
             [SerializeField] private Transform discussRefPoint;
+            [SerializeField] private bool debugDistance = false;
             private bool intercated = false;
             private bool isInteracting_ = false;
             private Transform refPoint;
-            private PlayerController pl;
+            private GameObject pl;
+            private GameObject playerParent;
 
             private void Start()
             {
-                pl = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+                pl = GameObject.FindGameObjectWithTag("PlayerMiddle");
+                playerParent = GameObject.FindGameObjectWithTag("Player");
+                if (pl == null)
+                    pl = playerParent;
                 if (discussRefPoint == null) {
                     refPoint = transform;
                 } else {
@@ -46,9 +51,9 @@ namespace kap35
             
             private void Update() {
                 OnUpdate();
-                if (Vector3.Distance(refPoint.position, pl.transform.position) <= interactDistance && !isInteracting) {
+                if (Vector3.Distance(refPoint.position, pl.transform.position) <= interactDistance && !isInteracting && playerParent.activeSelf) {
                     DetectInteracting();
-                } else if (isInteracting && Vector3.Distance(refPoint.position, pl.transform.position) > interactDistance) {
+                } else if (isInteracting && (Vector3.Distance(refPoint.position, pl.transform.position) > interactDistance || !playerParent.activeSelf)) {
                     StopInteracting();                    
                 }
                 if (interactImage != null) {
@@ -83,7 +88,17 @@ namespace kap35
             
             private void OnDrawGizmos() {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(transform.position, interactDistance);
+                Transform _refPoint = refPoint;
+                if (refPoint == null)
+                    _refPoint = transform;
+                Gizmos.DrawWireSphere(_refPoint.position, interactDistance);
+                if (debugDistance && pl != null) {
+                    if (Vector3.Distance(_refPoint.position, pl.transform.position) <= interactDistance)
+                        Gizmos.color = Color.green;
+                    else
+                        Gizmos.color = Color.red;
+                    Gizmos.DrawLine(_refPoint.position, pl.transform.position);
+                }
             }
 
             private void DetectInteracting()

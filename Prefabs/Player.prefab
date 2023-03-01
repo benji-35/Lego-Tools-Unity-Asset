@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 7755892407409381950}
   m_Layer: 6
   m_Name: HitPoint
-  m_TagString: Untagged
+  m_TagString: PlayerMiddle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -258,6 +258,7 @@ MonoBehaviour:
   animator: {fileID: 7755892406004292258}
   speed: 3
   runSpeed: 7
+  timeBetweenPunches: 0.5
   gravity: 3
   jumpForce: 0
   cameraHolder: {fileID: 7755892406948145928}
