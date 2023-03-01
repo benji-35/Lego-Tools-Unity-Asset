@@ -1,6 +1,8 @@
 # Lego-Tools-Unity-Asset
 Unity Asset for Lego video game
 
+[Documentation]("https://kap35.gitbook.io/lego-tools/")
+
 ## Contents
 
 Scripts :
