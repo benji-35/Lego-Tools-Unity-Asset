@@ -33,6 +33,7 @@ namespace kap35
             }
             
             private void Update() {
+                OnUpdate();
                 if (interactImage != null) {
                     interactCanvas.SetActive(isInteracting);
                 }
@@ -62,6 +63,8 @@ namespace kap35
                     StopCoroutine(InteractTiming(interactionTime));
                 }
             }
+            
+            protected virtual void OnUpdate() {}
 
             protected virtual void OnInteract() { }
             protected virtual void OnInteractEnd() { }
@@ -120,14 +123,12 @@ namespace kap35
                 }
             }
 
-            private void OnEnable()
-            {
+            private void OnEnable() {
                 if (interactCanvas != null)
                     interactCanvas.SetActive(false);
             }
 
-            private void OnDisable()
-            {
+            private void OnDisable() {
                 if (interactCanvas != null)
                     interactCanvas.SetActive(false);
             }

@@ -63,9 +63,25 @@ namespace kap35
                     }
                 }
 
-                if (player.GetComponent<PlayerController>() != null && interactPanel != null && pauseMenu != null &&
-                    discussPanel != null)
-                    gameIsReady = true;
+                gameIsReady = true;
+                if (player.GetComponent<PlayerController>() == null) {
+                    Debug.LogWarning("PlayerController not found");
+                    gameIsReady = false;
+                }
+
+                if (pauseMenu == null) {
+                    Debug.LogWarning("PauseMenu not found");
+                    gameIsReady = false;
+                }
+
+                if (discussPanel == null) {
+                    gameIsReady = false;
+                    Debug.LogWarning("DiscussPanel not found");
+                }
+
+                if (!gameIsReady) {
+                    Debug.LogWarning("Game is not ready");
+                }
                 HideInteract();
                 HidePauseMenu();
                 CloseDiscuss();
@@ -77,8 +93,10 @@ namespace kap35
 
             private void Update()
             {
-                if (!gameIsReady)
+                if (!gameIsReady) {
                     return;
+                }
+
                 if (GetNbQuestsDone() >= quests.Count)
                 {
                     if (!isFinished)
@@ -88,7 +106,10 @@ namespace kap35
                     }
                 }
 
-                questText.text = "Quests: " + GetNbQuestsDone() + " / " + quests.Count + "";
+                if (questText != null) {
+                    questText.text = "Quests: " + GetNbQuestsDone() + " / " + quests.Count + "";
+                }
+
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     if (pauseMenu.activeSelf)
@@ -110,10 +131,10 @@ namespace kap35
                     pauseMenu.SetActive(false);
                 }
 
-                if (!pauseMenu.activeSelf && numberOfInteractables > 0 && !interactPanel.activeSelf)
+                if (interactPanel != null && !pauseMenu.activeSelf && numberOfInteractables > 0 && !interactPanel.activeSelf)
                     interactPanel.SetActive(true);
-                else if ((pauseMenu.activeSelf && interactPanel.activeSelf) ||
-                         (numberOfInteractables <= 0 && interactPanel.activeSelf))
+                else if ((interactPanel != null && pauseMenu.activeSelf && interactPanel.activeSelf) ||
+                         (interactPanel != null && numberOfInteractables <= 0 && interactPanel.activeSelf))
                     interactPanel.SetActive(false);
                 if (!pauseMenu.activeSelf && isDiscussing && !discussPanel.activeSelf)
                 {
@@ -127,8 +148,7 @@ namespace kap35
 
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    if (isDiscussing)
-                    {
+                    if (isDiscussing) {
                         NextDiscuss();
                     }
                 }

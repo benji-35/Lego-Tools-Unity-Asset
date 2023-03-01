@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,11 @@ namespace kap35
 
             //can restart the discuss
             [SerializeField] private bool canRestartDiscuss = false;
+            [SerializeField] private Animator animator;
+            
+            [Header("Animation Settings")]
+            [SerializeField] private bool wavingHands = false;
+            [SerializeField] private float wavingHandsArea = 1.2f;
 
             //number of time the player discuss with the object
             private int discusses = 0;
@@ -26,27 +32,47 @@ namespace kap35
 
             //is the player discussing with the object
             private bool isDiscussing = false;
+            private GameObject player;
 
             // Start is called before the first frame update
-            void Start()
-            {
+            void Start() {
+                player = GameObject.FindGameObjectWithTag("Player");
                 if (firstDiscuss == null)
                 {
                     Debug.LogWarning("No discuss found");
                 }
+                onDiscussionFinish.AddListener(StopAnimations);
+                if (!canRestartDiscuss) {
+                    onDiscussionFinish.AddListener(DisplayDiscuss);
+                }
             }
 
-            protected override void OnInteract()
+            private void DisableDiscuss() {
+                this.enabled = false;
+            }
+
+            private void StopAnimations()
             {
+                if (animator == null)
+                    return;
+                animator.SetBool("wavingHand", false);
+                animator.SetBool("talking", false);
+            }
+
+            protected override void OnInteract() {
                 StartDiscuss();
             }
 
-            private void StartDiscuss()
-            {
+            private void StartDiscuss() {
                 if (firstDiscuss == null)
                     return;
-                if (discusses == 0 || canRestartDiscuss)
-                {
+                if (discusses == 0 || canRestartDiscuss) {
+                    if (animator != null) {
+                        animator.SetBool("talking", true);
+                        if (wavingHands) {
+                            animator.SetBool("wavingHand", false);
+                        }
+                    }
                     isDiscussing = true;
                     currentDiscuss = firstDiscuss;
                     OpenDiscuss();
@@ -75,15 +101,13 @@ namespace kap35
                 DisplayDiscuss();
             }
 
-            private void CloseDiscuss()
-            {
+            private void CloseDiscuss() {
                 isDiscussing = false;
                 currentDiscuss = null;
                 onDiscussionFinish.Invoke();
                 discusses++;
                 GameManger gameManager = GetGameManager();
-                if (gameManager == null)
-                {
+                if (gameManager == null) {
                     return;
                 }
 
@@ -120,6 +144,20 @@ namespace kap35
                 }
 
                 gameManager.SetInteractText(currentDiscuss.talker, currentDiscuss.text);
+            }
+
+            private void OnDrawGizmos() {
+                Gizmos.DrawWireSphere(transform.position, wavingHandsArea);
+            }
+
+            protected override void OnUpdate() {
+                if (player == null || wavingHands == false || animator == null)
+                    return;
+                if (Vector3.Distance(player.transform.position, transform.position) <= wavingHandsArea) {
+                    animator.SetBool("wavingHand", true);
+                } else {
+                    animator.SetBool("wavingHand", false);                    
+                }
             }
         }
     }

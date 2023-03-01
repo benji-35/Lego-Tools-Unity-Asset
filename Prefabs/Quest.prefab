@@ -358,7 +358,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   interactable: {fileID: 0}
   constructable: {fileID: 0}
-  haveToConstruct: 0
+  haveToConstruct: 1
   stateButton: 1
 --- !u!1 &2261775020518228493
 GameObject:
