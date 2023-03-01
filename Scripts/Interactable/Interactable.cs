@@ -36,7 +36,7 @@ namespace kap35
                     refPoint = discussRefPoint;
                 }
                 if (interactImage != null) {
-                    if (interactionTime > 0) {
+                    if (interactionTime > 0f) {
                         interactImage.fillAmount = 0f;
                     } else {
                         interactImage.fillAmount = 1f;
@@ -48,7 +48,7 @@ namespace kap35
                 OnUpdate();
                 if (Vector3.Distance(refPoint.position, pl.transform.position) <= interactDistance && !isInteracting) {
                     DetectInteracting();
-                } else if (isInteracting) {
+                } else if (isInteracting && Vector3.Distance(refPoint.position, pl.transform.position) > interactDistance) {
                     StopInteracting();                    
                 }
                 if (interactImage != null) {
@@ -92,6 +92,13 @@ namespace kap35
                 GameManger manager = GetGameManager();
                 if (manager != null)
                     manager.ShowInteract();
+                if (interactCanvas != null && interactImage != null) {
+                    if (interactionTime > 0f) {
+                        interactImage.fillAmount = 0f;
+                    } else {
+                        interactImage.fillAmount = 1f;
+                    }
+                }
                 isInteracting = true;
             }
 

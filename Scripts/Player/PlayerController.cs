@@ -13,7 +13,9 @@ namespace kap35 {
             [Header("Settings")]
             [SerializeField] private float speed = 6.0f;
             [SerializeField] private float runSpeed = 10.0f;
+            [SerializeField] private float timeBetweenPunches = 0.5f;
             private bool running = false;
+            private bool canPunch = true;
             
             [Header("Gravity")]
             [SerializeField] private float gravity = 9.81f;
@@ -122,10 +124,12 @@ namespace kap35 {
             }
 
             private void Punch() {
-                if (!Input.GetKeyDown(KeyCode.Mouse0)) {
+                if (!Input.GetKeyDown(KeyCode.Mouse0) || !canPunch) {
                     return;
                 }
+                canPunch = false;
                 animator.SetTrigger("punch");
+                StartCoroutine(waitingPunch());
                 StartCoroutine(stopMovement(0.867f));
                 RaycastHit hit;
                 if (Physics.Raycast(hitPoint.position, hitPoint.forward, out hit, hitPointDistance)) {
@@ -137,6 +141,12 @@ namespace kap35 {
                         }
                     }
                 }
+            }
+
+            IEnumerator waitingPunch()
+            {
+                yield return new WaitForSeconds(timeBetweenPunches);
+                canPunch = true;
             }
             
             IEnumerator stopMovement(float time) {

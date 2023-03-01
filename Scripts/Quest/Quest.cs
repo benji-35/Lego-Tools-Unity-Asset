@@ -9,6 +9,7 @@ namespace kap35
 {
     namespace lego
     {
+        [HelpURL("https://kap35.gitbook.io/lego-tools/developper/quest")]
         public class Quest : MonoBehaviour
         {
             [Header("GENERAL")] [SerializeField] private string questName;
@@ -50,7 +51,6 @@ namespace kap35
             
             [Header("Construct Quest")]
             [SerializeField] private Constructable constructable;
-            [SerializeField] private bool haveToConstruct = false;
 
             [SerializeField] private bool stateButton = true;
 
@@ -82,8 +82,7 @@ namespace kap35
                 {
                     QuestMarker.transform.LookAt(2 * QuestMarker.transform.position - camPlayer.transform.position);
                     RectTransform rectTransform = QuestMarker.GetComponent<RectTransform>();
-                    if (rectTransform != null)
-                    {
+                    if (rectTransform != null) {
                         float dist = Vector3.Distance(player.transform.position, refDistance.transform.position);
                         if (dist <= maxSizeDistance && dist >= minSizeDistance)
                         {
@@ -141,10 +140,11 @@ namespace kap35
                 if (Vector3.Distance(target, player.transform.position) <= _waypoint.radius)
                 {
                     currentWaypoint++;
-                    if (currentWaypoint < waypoints.Count)
-                    {
+                    _waypoint.position.gameObject.SetActive(false);
+                    if (currentWaypoint < waypoints.Count) {
                         QuestMarker.transform.position = waypoints[currentWaypoint].position.position;
                         refDistance.transform.position = waypoints[currentWaypoint].position.position;
+                        waypoints[currentWaypoint].position.gameObject.SetActive(true);
                     }
                 }
 
@@ -201,6 +201,13 @@ namespace kap35
                 return true;
             }
 
+            private void initWaypoints() {
+                foreach (var waypoint in waypoints) {
+                    waypoint.position.gameObject.SetActive(false);
+                }
+                waypoints[0].position.gameObject.SetActive(true);
+            }
+
             private void FinishQuest()
             {
                 state = QuestState.Finished;
@@ -221,8 +228,7 @@ namespace kap35
                 gameObject.SetActive(true);
                 state = QuestState.InProgress;
                 QuestMarker.SetActive(true);
-                switch (questType)
-                {
+                switch (questType) {
                     case QuestType.Talk when talkTo != null:
                         QuestMarker.transform.position = talkTo.transform.position;
                         refDistance.transform.position = talkTo.transform.position;
@@ -232,6 +238,7 @@ namespace kap35
                         QuestMarker.transform.position = waypoints[0].position.position;
                         refDistance.transform.position = waypoints[0].position.position;
                         currentWaypoint = 0;
+                        initWaypoints();
                         break;
                     case QuestType.Collect:
                     {
@@ -258,20 +265,28 @@ namespace kap35
                     {
                         QuestMarker.transform.position = constructable.transform.position;
                         refDistance.transform.position = constructable.transform.position;
-                        if (haveToConstruct) {
-                            constructable.AddEventOnConstruct(FinishQuest);
-                        } else {
-                            constructable.AddEventOnDestruct(FinishQuest);
+                        if (!constructable.IsDestroyed()) {
+                            FinishQuest();
+                            break;
                         }
-
+                        constructable.AddEventOnConstruct(FinishQuest);
                         break;
                     }
-                    case QuestType.Destroy:
+                    case QuestType.Destroy when constructable != null:
+                        QuestMarker.transform.position = constructable.transform.position;
+                        refDistance.transform.position = constructable.transform.position;
+                        if (constructable.IsDestroyed()) {
+                            FinishQuest();
+                            break;
+                        }
+                        constructable.AddEventOnDestruct(FinishQuest);
                         break;
                     case QuestType.Other:
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        Debug.LogWarning("Quest type not implemented or not set or not enough parameters");
+                        FinishQuest();
+                        break;
                 }
 
                 eventsOnStart.Invoke();

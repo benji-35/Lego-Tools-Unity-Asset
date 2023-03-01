@@ -65,6 +65,18 @@ namespace kap35 {
             public void AddEventOnDestruct(UnityAction action) {
                 _onDestruct.AddListener(action);
             }
+            
+            public bool IsDestroyed() {
+                return isDestroyed;
+            }
+            
+            public GameObject GetConstructObject() {
+                return _constructObject;
+            }
+            
+            public GameObject GetDestructObject() {
+                return _destructObject;
+            }
         }
     }
 }

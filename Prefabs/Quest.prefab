@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2261775019396512493}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RefDistance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2261775019643215328}
   - component: {fileID: 2261775019643215329}
   - component: {fileID: 2261775019643215342}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 2261775019832081760}
   - component: {fileID: 2261775019832081762}
   - component: {fileID: 2261775019832081763}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 2261775020303905910}
   - component: {fileID: 2261775020303905896}
   - component: {fileID: 2261775020303905897}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: QuestPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,9 +296,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2261775020313720977}
   - component: {fileID: 2261775020313720990}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Quest
-  m_TagString: Untagged
+  m_TagString: Quest
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -358,7 +358,6 @@ MonoBehaviour:
   enemy: {fileID: 0}
   interactable: {fileID: 0}
   constructable: {fileID: 0}
-  haveToConstruct: 1
   stateButton: 1
 --- !u!1 &2261775020518228493
 GameObject:
@@ -371,7 +370,7 @@ GameObject:
   - component: {fileID: 2261775020518228492}
   - component: {fileID: 2261775020518228494}
   - component: {fileID: 2261775020518228495}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace kap35
@@ -9,15 +10,23 @@ namespace kap35
     {
         public class Coin : MonoBehaviour
         {
+            [Header("Coin Settings")]
             [SerializeField] private int coinValue = 1;
             [SerializeField] private float timeAlive = 60f;
 
             [SerializeField] private float jumpForce = 5f;
             [SerializeField] private AudioSource audioSource;
+            
+            [Header("Detection Settings")]
+            [SerializeField] private float detectDistance = 1f;
+            
+            private PlayerController pl;
+            private bool canGrab = true;
 
             // Start is called before the first frame update
             void Start()
             {
+                pl = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
                 Destroy(gameObject, timeAlive);
                 if (coinValue <= 100)
                 {
@@ -33,19 +42,27 @@ namespace kap35
                 }
             }
 
-            private void OnTriggerEnter(Collider other)
+            private void Update()
             {
-                if (other.tag == "Player")
-                {
-                    if (audioSource != null)
-                        audioSource.Play();
-                    GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-                    if (obj != null)
-                        obj.GetComponent<GameManger>().AddCoin(coinValue);
-                    GetComponent<MeshRenderer>().enabled = false;
-                    GetComponent<BoxCollider>().enabled = false;
-                    StartCoroutine(waitingForDestroy());
+                if (pl == null)
+                    Destroy(gameObject);
+                if (Vector3.Distance(transform.position, pl.transform.position) < detectDistance) {
+                    GrabCoin();
                 }
+            }
+
+            private void GrabCoin()
+            {
+                if (!canGrab)
+                    return;
+                if (audioSource != null)
+                    audioSource.Play();
+                GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
+                if (obj != null)
+                    obj.GetComponent<GameManger>().AddCoin(coinValue);
+                GetComponent<MeshRenderer>().enabled = false;
+                canGrab = false;
+                StartCoroutine(waitingForDestroy());
             }
 
             private void OnCollisionEnter(Collision collision)
@@ -68,6 +85,12 @@ namespace kap35
             {
                 yield return new WaitForSeconds(1);
                 Destroy(gameObject);
+            }
+
+            private void OnDrawGizmos()
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(transform.position, detectDistance);
             }
         }
     }

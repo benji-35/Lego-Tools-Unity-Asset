@@ -14,7 +14,8 @@ namespace kap35
             [SerializeField] private UnityEvent onButtonActive;
             [SerializeField] private UnityEvent onButtonInactive;
             protected override void OnInteract() {
-                animator.SetTrigger("Interact");
+                if (animator != null)
+                    animator.SetTrigger("Interact");
                 active = !active;
                 if (active) {
                     onButtonActive.Invoke();

@@ -68,7 +68,6 @@ public class QuestEditor : Editor {
             #region Constructor
 
                 private SerializedProperty constructor;
-                private SerializedProperty haveToCOnstruct;
 
             #endregion
             
@@ -119,7 +118,6 @@ public class QuestEditor : Editor {
         
         // constructor
         constructor = serializedObject.FindProperty("constructable");
-        haveToCOnstruct = serializedObject.FindProperty("haveToConstruct");
         
     }
 
@@ -179,9 +177,6 @@ public class QuestEditor : Editor {
                 case QuestType.Collect:
                     DisplayCollectEditor(quest);
                     break;
-                case QuestType.Destroy:
-                    DisplayDestructEditor();
-                    break;
                 case QuestType.Kill:
                     DisplayKillEditor();
                     break;
@@ -196,6 +191,9 @@ public class QuestEditor : Editor {
                     break;
                 case QuestType.Construct:
                     DisplayConstructEditor();
+                    break;
+                case QuestType.Destroy:
+                    DisplayDestroyEditor();
                     break;
                 default:
                     DisplayOtherEditor();
@@ -234,8 +232,19 @@ public class QuestEditor : Editor {
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(constructor);
         EditorGUILayout.EndHorizontal();
+    }
+    
+    private void DisplayDestroyEditor() {
+        var style = new GUIStyle(GUI.skin.label)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            fontStyle = FontStyle.Bold,
+            fontSize = 15,
+        };
+        EditorGUILayout.LabelField("Destroy", style, GUILayout.ExpandWidth(true));
+        EditorGUILayout.Space(15);
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PropertyField(haveToCOnstruct);
+        EditorGUILayout.PropertyField(constructor);
         EditorGUILayout.EndHorizontal();
     }
     
@@ -266,10 +275,6 @@ public class QuestEditor : Editor {
         EditorGUILayout.LabelField("You", GUILayout.Width(100));
         EditorGUILayout.PropertyField(talkTo);
         EditorGUILayout.EndHorizontal();
-    }
-    
-    private void DisplayDestructEditor() {
-        
     }
     
     private void DisplayMoveEditor(Quest quest) {
