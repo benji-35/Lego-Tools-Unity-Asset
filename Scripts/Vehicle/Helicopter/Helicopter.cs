@@ -13,10 +13,10 @@ public class Helicopter : Vehicle {
     [Header("Arcade settings")]
     [SerializeField] private float arcadeUpForce = 100f;
     [SerializeField] private float turningSpeed = 50f;
-    [SerializeField] private float arcadeForwardForce = 100f;
-    [SerializeField] private float arcadeBackwardForce = 100f;
-    [SerializeField] private float arcadeLeftForce = 100f;
-    [SerializeField] private float arcadeRightForce = 100f;
+    [SerializeField] private float arcadeForwardForce = 1000f;
+    [SerializeField] private float arcadeBackwardForce = 1000f;
+    [SerializeField] private float arcadeLeftForce = 1000f;
+    [SerializeField] private float arcadeRightForce = 1000f;
 
     private void Awake()
     {
