@@ -29,10 +29,15 @@ namespace kap35
             private GameObject pl;
             private GameObject playerParent;
 
-            private void Start()
-            {
-                pl = GameObject.FindGameObjectWithTag("PlayerMiddle");
+            private void Start() {
                 playerParent = GameObject.FindGameObjectWithTag("Player");
+                if (playerParent == null) {
+                    Debug.LogError("Player not found");
+                    enabled = false;
+                    return;
+                }
+
+                pl = playerParent.GetComponent<PlayerController>().GetHitPoint().gameObject;
                 if (pl == null)
                     pl = playerParent;
                 if (discussRefPoint == null) {

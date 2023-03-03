@@ -8,6 +8,7 @@ using UnityEngine;
 public class Vehicle : MonoBehaviour {
     [SerializeField] protected GameObject[] cameras;
     [SerializeField] protected VehicleSeat[] seats;
+    [SerializeField] protected ControlType controlType = ControlType.ARCADE;
     
     private GameObject player;
     private int currentCameraIndex = 0;
@@ -125,6 +126,10 @@ public class Vehicle : MonoBehaviour {
 
         return false;
     }
+    
+    public ControlType GetControlType() {
+        return controlType;
+    }
 }
 
 [Serializable]
@@ -150,4 +155,10 @@ public class VehicleSeat {
         isOccupied = false;
         vehicle.GetOut(exitPoint);
     }
+}
+
+[Serializable]
+public enum ControlType {
+    ARCADE,
+    REALISTIC,
 }

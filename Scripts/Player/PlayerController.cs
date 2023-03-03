@@ -160,6 +160,10 @@ namespace kap35 {
                 Gizmos.color = Color.red;
                 Gizmos.DrawRay(hitPoint.position, hitPoint.forward * hitPointDistance);
             }
+
+            public Transform GetHitPoint() {
+                return hitPoint;
+            }
         }
     }
 }
